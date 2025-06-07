@@ -10,6 +10,58 @@ import { userIsInRole } from '../../../lib/utils/utils_account';
 import { Explanations } from '../../explanations';
 import { RecommendationListsItem } from '../../recommendationListsItem';
 
+// Cache for news articles to improve performance
+let cachedArticles = null;
+let lastCacheUpdate = 0;
+const CACHE_DURATION_MS = 8 * 60 * 60 * 1000; // 8 hours
+const NUM_ARTICLES_TO_CACHE = 100; // Number of articles to cache initially
+
+// Helper function to manage cache that can grow dynamically
+function getCachedNewsArticles(limit) {
+  const now = Date.now();
+
+  if (!cachedArticles || (now - lastCacheUpdate) > CACHE_DURATION_MS) {
+    console.log(`[CacheManager] Cache expired or not initialized. Refreshing cache...`);
+
+    cachedArticles = NewsArticles.find({}, {
+      sort: { datePublished: -1 },
+      limit: NUM_ARTICLES_TO_CACHE
+    }).fetch();
+
+    lastCacheUpdate = now;
+
+    console.log(`[CacheManager] Cached ${cachedArticles.length} articles`);
+  }
+
+  // If the current cache is too small, grow it
+  if (limit > cachedArticles.length) {
+    const missing = limit - cachedArticles.length;
+    const additionalToFetch = Math.ceil(missing / NUM_ARTICLES_TO_CACHE) * NUM_ARTICLES_TO_CACHE; // round up to next 1000
+    const newLimit = cachedArticles.length + additionalToFetch;
+
+    console.log(`[CacheManager] Growing cache by ${additionalToFetch} articles (new limit: ${newLimit})`);
+
+    // Fetch new articles, starting after last cached one
+    const newArticles = NewsArticles.find({}, {
+      sort: { datePublished: -1 },
+      skip: cachedArticles.length, // skip already cached ones
+      limit: additionalToFetch
+    }).fetch();
+
+    cachedArticles = cachedArticles.concat(newArticles);
+    console.log(`[CacheManager] Cache now has ${cachedArticles.length} articles`);
+  } else {
+    console.log(`[CacheManager] Serving articles from cache with limit ${limit}`);
+  }
+
+  return cachedArticles.slice(0, limit);
+}
+
+Meteor.startup(() => {
+  // Warm up the cache with articles
+  getCachedNewsArticles(NUM_ARTICLES_TO_CACHE);
+});
+
 Meteor.publish('newsArticle', (articleId) => {
     check(articleId, String);
     return NewsArticles.find(articleId, { sort: { datePublished: -1 } });
@@ -155,7 +207,9 @@ Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(lim
             });
         }
     } else {
-        const newsArticles = NewsArticles.find({}, { sort: { datePublished: -1 }, limit }).fetch();
+        // using a cache to improve performance
+        const newsArticles = getCachedNewsArticles(limit);
+
         for (let i = 0; i < newsArticles.length; i++) {
             const article = newsArticles[i];
 

@@ -2,9 +2,9 @@
   "expo": {
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
-    "name": "Nemo Informfully",
-    "slug": "Nemo Informfully",
-    "version": "1.0.0",
+    "name": "NEMO Kennislink App",
+    "slug": "NEMO Kennislink App",
+    "version": "1.1.0",
     "icon": "./assets/logo_1024.png",
     "platforms": [
       "ios",
@@ -12,7 +12,7 @@
     ],
     "android": {
       "package": "nl.nemokennislink.informfully",
-      "versionCode": 28,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo_1024_android_adaptive_foreground.png",
         "monoChromeImage": "./assets/logo_1024_android_adaptive_monochrome.png",
@@ -32,7 +32,7 @@
       {
           "android": {
             "compileSdkVersion": 33,
-            "targetSdkVersion": 33
+            "targetSdkVersion": 34
           },
           "ios": {
             "deploymentTarget": "15.0"

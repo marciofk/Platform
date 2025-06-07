@@ -21,6 +21,8 @@
     "jest-expo": "^47.0.0",
     "metro-react-native-babel-preset": "^0.72.4",
     "npm": "^6.14.6",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "react-test-renderer": "18.1.0"
   },
   "scripts": {
@@ -58,8 +60,6 @@
     "i18n-js": "^3.7.0",
     "lodash": "^4.17.21",
     "moment": "^2.24.0",
-    "patch-package": "^8.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.6.2",
     "react": "18.1.0",
     "react-addons-update": "^15.6.2",

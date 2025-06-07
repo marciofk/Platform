@@ -43,6 +43,7 @@ import { collectionManager } from '../../lib/utils/collectionManager';
 import { removeWeirdMinusSignsInFrontOfString } from '../../lib/utils/utils';
 import { NAVIGATION_ICONS } from '../../lib/parameters/icons';
 import * as NavigationBar from 'expo-navigation-bar';
+import ExpandableSection from '../elements/ExpandableSection';
 
 const bookmarkIconSolid = require('../../assets/icons/bookmarks/bookmark__black--solid.png');
 const bookmarkIconBordered = require('../../assets/icons/bookmarks/bookmark__black--bordered.png');
@@ -338,6 +339,7 @@ class InnerArticle extends React.Component {
         return article.body.map(({
             text,
             type,
+            title
         }, i) => {
             if (text) {
                 if (type === 'subtitle') {
@@ -378,6 +380,15 @@ class InnerArticle extends React.Component {
                                     ) : null} */}
                                 </View>
                             );
+                }
+                if (type === 'expandable') {
+                    return (
+                        <ExpandableSection
+                            key={i}
+                            title={title || 'More Details'}
+                            content={text}
+                        />
+                    );
                 }
             }
             return null;
