@@ -14,7 +14,7 @@ import { RecommendationListsItem } from '../../recommendationListsItem';
 let cachedArticles = null;
 let lastCacheUpdate = 0;
 const CACHE_DURATION_MS = 8 * 60 * 60 * 1000; // 8 hours
-const NUM_ARTICLES_TO_CACHE = 100; // Number of articles to cache initially
+const NUM_ARTICLES_TO_CACHE = 1000; // Number of articles to cache initially
 
 // Helper function to manage cache that can grow dynamically
 function getCachedNewsArticles(limit) {
@@ -50,9 +50,7 @@ function getCachedNewsArticles(limit) {
 
     cachedArticles = cachedArticles.concat(newArticles);
     console.log(`[CacheManager] Cache now has ${cachedArticles.length} articles`);
-  } else {
-    console.log(`[CacheManager] Serving articles from cache with limit ${limit}`);
-  }
+  } 
 
   return cachedArticles.slice(0, limit);
 }
