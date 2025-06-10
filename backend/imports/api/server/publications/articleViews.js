@@ -13,18 +13,17 @@ Meteor.publish('articleViews', function (articleId) {
     const cleanArticleId = removeWeirdMinusSignsInFrontOfString(articleId);
 
     // optimisation start
-    const fullArticle = NewsArticles.findOne({ _id: cleanArticleId });
+    // const fullArticle = NewsArticles.findOne({ _id: cleanArticleId });
 
-    if (fullArticle) {
-        this.added('newsArticlesJoined', fullArticle._id, {
-            ...fullArticle,
-        });
+    // if (fullArticle) {
+    //     // Force mutation of body to trigger reactivity
+    //     const fullFields = {
+    //         ...fullArticle,
+    //         body: [...(fullArticle.body || [])], // force array copy
+    //     };
 
-        this.changed('newsArticlesJoined', fullArticle._id, {
-            ...fullArticle,
-        });
-    }
-    this.ready(); // signal completion
+    //     this.changed('newsArticlesJoined', fullArticle._id, fullFields);
+    // }
     // optimisation end
 
     return ArticleViews.find(
