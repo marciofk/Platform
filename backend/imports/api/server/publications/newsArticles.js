@@ -26,7 +26,18 @@ function getCachedNewsArticles(limit) {
 
     cachedArticles = NewsArticles.find({}, {
       sort: { datePublished: -1 },
-      limit: NUM_ARTICLES_TO_CACHE
+      limit: NUM_ARTICLES_TO_CACHE,
+      fields: {
+            _id: 1,
+            title: 1,
+            datePublished: 1,
+            image: 1,
+            articleType: 1,
+            explanationArticle: 1,
+            primaryCategory: 1,
+            largePreview: 1,
+            prediction: 1,
+        }
     }).fetch();
 
     lastCacheUpdate = now;
@@ -1577,6 +1588,21 @@ Meteor.publish('furtherRecommendedNewsArticles', function furtherRecommendedNews
     // If at some point the article Preview component has to be extended by showing the star symbol, similar to the
     // bookmark symbol currently, then an archiveListObserver will have to be added (similar to the
     // readingListObserver above).
+
+    // workaround to avoid massive updates during preview
+    // the app originally was publishing the full article body, which is not needed in the preview
+    // this is a place that works as a proxy to identify if the article was clicked
+    // then, it is supplemented with other information, such as the full article body
+    // it prevents from sending the app to the store.
+
+    const fullArticle = NewsArticles.findOne({ _id: cleanId });
+
+    if (fullArticle) {
+        this.changed('newsArticlesJoined', fullArticle._id, fullArticle);
+        console.log('full article body sent', fullArticle._id);
+    }
+
+    // end.
 
     this.ready();
     initializing = false;
