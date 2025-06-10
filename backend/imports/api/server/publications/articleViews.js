@@ -24,7 +24,7 @@ Meteor.publish('articleViews', function (articleId) {
             ...fullArticle,
         });
     }
-    // this.ready(); // signal completion
+    this.ready(); // signal completion
     // optimisation end
 
     return ArticleViews.find(
