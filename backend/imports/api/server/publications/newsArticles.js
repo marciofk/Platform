@@ -27,17 +27,14 @@ function getCachedNewsArticles(limit) {
     cachedArticles = NewsArticles.find({}, {
       sort: { datePublished: -1 },
       limit: NUM_ARTICLES_TO_CACHE,
-    //   fields: {
-    //         _id: 1,
-    //         title: 1,
-    //         datePublished: 1,
-    //         image: 1,
-    //         articleType: 1,
-    //         explanationArticle: 1,
-    //         primaryCategory: 1,
-    //         largePreview: 1,
-    //         prediction: 1,
-    //     }
+      fields: {
+            _id: 1,
+            title: 1,
+            datePublished: 1,
+            image: 1,
+            articleType: 1,
+            primaryCategory: 1
+        }
     }).fetch();
 
     lastCacheUpdate = now;
