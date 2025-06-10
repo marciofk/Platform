@@ -15,6 +15,7 @@ let cachedArticles = null;
 let lastCacheUpdate = 0;
 const CACHE_DURATION_MS = 8 * 60 * 60 * 1000; // 8 hours
 const NUM_ARTICLES_TO_CACHE = 1000; // Number of articles to cache initially
+requestCalls = 0;
 
 // Helper function to manage cache that can grow dynamically
 function getCachedNewsArticles(limit) {
@@ -120,6 +121,7 @@ Meteor.publish('notification', function () {
 Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(limit, date) {
     check(limit, Number);
     check(date, Match.Maybe(Date));
+    requestCalls++;
 
     let initializing = true;
     const { userId } = this;
@@ -207,6 +209,7 @@ Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(lim
     } else {
         // using a cache to improve performance
         const newsArticles = getCachedNewsArticles(limit);
+        console.log(`[newsArticlesJoined] Fetched ${newsArticles.length} articles from cache - count : ${requestCalls} - userId: ${userId}`);   
 
         for (let i = 0; i < newsArticles.length; i++) {
             const article = newsArticles[i];
