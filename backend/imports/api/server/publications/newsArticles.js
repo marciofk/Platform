@@ -27,17 +27,17 @@ function getCachedNewsArticles(limit) {
     cachedArticles = NewsArticles.find({}, {
       sort: { datePublished: -1 },
       limit: NUM_ARTICLES_TO_CACHE,
-      fields: {
-            _id: 1,
-            title: 1,
-            datePublished: 1,
-            image: 1,
-            articleType: 1,
-            explanationArticle: 1,
-            primaryCategory: 1,
-            largePreview: 1,
-            prediction: 1,
-        }
+    //   fields: {
+    //         _id: 1,
+    //         title: 1,
+    //         datePublished: 1,
+    //         image: 1,
+    //         articleType: 1,
+    //         explanationArticle: 1,
+    //         primaryCategory: 1,
+    //         largePreview: 1,
+    //         prediction: 1,
+    //     }
     }).fetch();
 
     lastCacheUpdate = now;
@@ -1323,6 +1323,7 @@ Meteor.publish('newsArticlesInArchive', function newsArticlesInArchivePublicatio
 
 Meteor.publish('furtherRecommendedNewsArticles', function furtherRecommendedNewsArticlesPublications(limit, primaryCategory, articleId) {
 
+
     /**
      * This function is used to select a limited number of entries based on their probability of being selected, 
      * @param {*} entries 
@@ -1595,12 +1596,12 @@ Meteor.publish('furtherRecommendedNewsArticles', function furtherRecommendedNews
     // then, it is supplemented with other information, such as the full article body
     // it prevents from sending the app to the store.
 
-    const fullArticle = NewsArticles.findOne({ _id: cleanId });
+    // const fullArticle = NewsArticles.findOne({ _id: cleanId });
 
-    if (fullArticle) {
-        this.changed('newsArticlesJoined', fullArticle._id, fullArticle);
-        console.log('full article body sent', fullArticle._id);
-    }
+    // if (fullArticle) {
+    //     this.changed('newsArticlesJoined', fullArticle._id, fullArticle);
+    //     console.log('full article body sent', fullArticle._id);
+    // }
 
     // end.
 
