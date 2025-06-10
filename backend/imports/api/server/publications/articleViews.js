@@ -16,9 +16,9 @@ Meteor.publish('articleViews', function (articleId) {
     const fullArticle = NewsArticles.findOne({ _id: cleanArticleId });
 
     if (fullArticle) {
-        // this.added('newsArticlesJoined', fullArticle._id, {
-        //     ...fullArticle,
-        // });
+        this.added('newsArticlesJoined', fullArticle._id, {
+            ...fullArticle,
+        });
 
         this.changed('newsArticlesJoined', fullArticle._id, {
             ...fullArticle,
