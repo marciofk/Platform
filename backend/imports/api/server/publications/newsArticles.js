@@ -119,19 +119,34 @@ Meteor.publish('notification', function () {
  */
 // eslint-disable-next-line no-unused-vars
 Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(limit, date) {
+
+    var start = Date.now();    
+    const logTime = (label) => {
+        const now = Date.now();
+        console.log(`after ${label}: took ${now - start} ms`);
+        return now;
+    };
+
+    start = Date.now();    
     check(limit, Number);
     check(date, Match.Maybe(Date));
+    logTime('check and requestCalls');
+
     requestCalls++;
 
     let initializing = true;
     const { userId } = this;
 
     let experiment;
+    start = Date.now();    
     let user = Meteor.user({ fields: { participatesIn: 1 } });
+    logTime('getting user');
     if (!user) {
         experiment = null;
     } else {
+        start = Date.now();    
         experiment = Experiments.findOne({ _id: user.participatesIn });
+        logTime('getting experiment');
     }
     if (!experiment) {
         user = Meteor.user({ fields: { experiments: 1 } });
@@ -153,8 +168,9 @@ Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(lim
     if (maxNrExplanationTags === undefined) {
         maxNrExplanationTags = 0;
     }
-
+    start = Date.now();    
     const recommendations = Recommendations.find({ userId }, { sort: { prediction: -1 }, limit }).fetch();
+    logTime('reading recommendations');
 
     if (recommendations && recommendations.length > 0) {
         for (let i = 0; i < recommendations.length; i++) {
@@ -208,7 +224,10 @@ Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(lim
         }
     } else {
         // using a cache to improve performance
+        start = Date.now();    
         const newsArticles = getCachedNewsArticles(limit);
+        logTime('getting cached news articles');
+
         console.log(`[newsArticlesJoined] Fetched ${newsArticles.length} articles from cache - count : ${requestCalls} - userId: ${userId}`);   
 
         for (let i = 0; i < newsArticles.length; i++) {
