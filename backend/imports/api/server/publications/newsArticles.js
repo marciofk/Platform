@@ -30,12 +30,21 @@ function getCachedNewsArticles(limit) {
       fields: {
             _id: 1,
             title: 1,
+            lead: 1,
             datePublished: 1,
             image: 1,
             articleType: 1,
-            primaryCategory: 1
+            primaryCategory: 1,
+            author: 1
         }
     }).fetch();
+
+    // cachedArticles.forEach(article => {
+    //     if (Array.isArray(article.body) && article.body.length > 2) {
+    //         article.body = article.body.slice(0, 2);
+    //         console.log(`[CacheManager] Truncated body for article ${article._id}`);
+    //     }
+    // });
 
     lastCacheUpdate = now;
 

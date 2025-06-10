@@ -10,7 +10,7 @@ Meteor.startup(() => {
         process.env.MAIL_URL = 'smtp://localhost:25';
     }
 
-    RecommendationListsItem.rawCollection().createIndex({ articleId: 1, userId: 1 });
-    console.log('RecommendationListsItem index created');
+    // RecommendationListsItem.rawCollection().createIndex({ articleId: 1, userId: 1 });
+    // console.log('RecommendationListsItem index created');
 
 });
