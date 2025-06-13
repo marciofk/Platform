@@ -229,7 +229,7 @@ Meteor.publish('newsArticlesJoined', function newsArticlesJoinedPublications(lim
         // using a cache to improve performance
         const newsArticles = getCachedNewsArticles(limit);
 
-        console.log(`[newsArticlesJoined] Fetched ${newsArticles.length} articles from cache - count : ${requestCalls} - userId: ${userId}`);   
+        console.log(`[${new Date().toISOString()}] [newsArticlesJoined] Fetched ${newsArticles.length} articles from cache - count: ${requestCalls} - userId: ${userId}`);
 
         for (let i = 0; i < newsArticles.length; i++) {
             const article = newsArticles[i];
